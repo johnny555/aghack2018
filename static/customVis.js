@@ -3,6 +3,7 @@ var video = document.getElementById('video');
 
 
 function cameraStart() {
+    console.log("starting camera...");
     navigator.mediaDevices.getUserMedia({
     audio: false,
     video: true
@@ -26,4 +27,5 @@ photo_settings.takepicture = function (width, height) {
     return data;
 };
 
-window.addEventListener("load", cameraStart, false);
+//window.addEventListener("load", cameraStart, false);
+cameraStart();
