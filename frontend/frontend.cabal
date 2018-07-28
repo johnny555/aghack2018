@@ -11,6 +11,10 @@ library
                , static
                , text
                , semantic-reflex
+               , lens
+               , containers
+               , jsaddle
+               , bytestring
   exposed-modules:
     Frontend
   ghc-options: -Wall
@@ -25,6 +29,10 @@ executable frontend
                , text
                , frontend
                , semantic-reflex
+               , lens
+               , containers
+               , jsaddle
+               , bytestring
   --TODO: Make these ghc-options optional
   ghc-options: -threaded
   if os(darwin)
