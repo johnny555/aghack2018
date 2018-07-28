@@ -1,10 +1,8 @@
-globalMedia = navigator.mediaDevices.getUserMedia({
+var video = document.getElementById('video');
+navigator.mediaDevices.getUserMedia({
     audio: false,
     video: true
-});
-var video = document.getElementById('video');
-
-globalMedia.then(function ( stream) {
-    video.src = stream.srcObject;
+}).then(function ( stream) {
+    video.src = stream;
     video.play();
-});
+});;
