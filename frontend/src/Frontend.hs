@@ -78,7 +78,7 @@ bod = do
         r <- S.button def $ text "Result "
         pure (c, r)
       divClass "ui row" $ elAttr "canvas" (dimensions <> "id"=:"canvas") $ text "Please wait untill video is ready..."
-      segment def $ text "no results yet"
+      segment (def & segmentConfig_elConfig . elConfigAttributes |~ ("id" =: "output") ) $ text "no results yet"
       pure c
 
     jsReady <- loadJSLibs

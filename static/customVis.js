@@ -1,4 +1,5 @@
 var video = document.getElementById('video');
+var output = document.getElementById('output');
 //var photo = document.getElementById('photo');
 
 
@@ -70,13 +71,15 @@ uploader.upload = function () {
         if (err) {
             return alert("There was an error uploading");
         }
-        alert("Successfully uploaded");
+        output.innerText = "Successfully uploaded";
     });
 };
 
 
 resulter = {};
 resulter.listener = (e) => {
+
+    output.innerText = e;
     console.log(e);
 };
 resulter.getResult = function () {
