@@ -9,6 +9,8 @@ import Reflex.Dom.Core
 import Common.Api
 import Static
 
+import Data.Monoid ((<>))
+
 frontend :: (StaticWidget x (), Widget x ())
 frontend = (head', body)
   where
@@ -21,7 +23,7 @@ loadJSLibs = do
   let
       custSrc = "customVis.js"
 
-  (cust_script, _ ) <- elAttr' "script" ("src" =: custSrc) blank
+  (cust_script, _) <- elAttr' "script" ("src" =: custSrc) blank
 
   pure $ () <$ domEvent Load cust_script
 
@@ -30,7 +32,10 @@ loadJSLibs = do
 bod :: MonadWidget t m => m ()
 bod = do
   jsReady <- loadJSLibs
-  text "Welcome to Obelisk!"
-  el "p" $ text $ T.pack commonStuff
-  elAttr "img" ("src" =: static @"obelisk.jpg") blank
+  text "Welcome to BugADex!"
+  el "p" $ text $ "Take a photo of a bug!"
+  let dimensions ="width"=:"640"<>"height"=:"480"
+  elAttr "video" ("id"=:"video"<>dimensions <> "autoplay"=:"") blank
+  elAttr "button" ("id"=:"snap") $ text "Snap Photo"
+  elAttr "canvas" (dimensions <> "id"=:"canvas") blank
   blank
