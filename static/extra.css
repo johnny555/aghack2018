@@ -1,0 +1,25 @@
+.header {
+  font-weight: bold;
+}
+
+#mynetwork {
+  height: 60vh;
+}
+
+.ui.button {
+  margin-top: 1vh;
+}
+
+.button-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.title {
+  padding-top: 1rem;
+}
+
+#footer {
+  background-color: orange;
+}
