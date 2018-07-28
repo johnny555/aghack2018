@@ -7,7 +7,7 @@ var output = document.getElementById('output');
 function cameraStart() {
     console.log("starting camera...");
     navigator.mediaDevices.getUserMedia({
-    audio: true,
+    audio: false,
     video: true
 }).then(function ( stream) {
     video.srcObject = stream;
