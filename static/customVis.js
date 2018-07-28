@@ -90,6 +90,12 @@ resulter.getResult = function () {
         "?" + Object.keys(params).map((key) => {return key + "=" + encodeURIComponent(params[key])}).join("&");
     oReq.open("GET",
               queryString);
+
+    oReq.onreadystatechange = function() {
+        if (oReq.readyState == XMLHttpRequest.DONE) {
+            resulter.listener(oReq.responseText);
+        }
+    }
     oReq.setRequestHeader("x-api-key", "Pc0H7UGiNL4DuShrbs1uO4DAsyQFhf5j8uLmXJI9");
     oReq.send();
 
