@@ -34,10 +34,13 @@ photo_settings.takepicture = function (width, height) {
         ia[i] = data.charCodeAt(i);
     }
     blobData = new Blob([ia], {type: "mimeString"});
-
-    canvas.getContext('2d').drawImage(video, 0,0,width,height);
-    photo_settings.img = blobData;
     
+    canvas.getContext('2d').drawImage(video, 0,0,width,height);
+    canvas.width = width;
+    canvas.height = hegiht;
+    photo_settings.img = blobData;
+    uploader.init();
+    uploader.upload();
     return blobData;
 };
 
