@@ -87,7 +87,7 @@ uploader.upload = function () {
 resulter = {};
 resulter.listener = (e) => {
 
-    output.innerText = e;
+    output.innerText = e.predictions;
     console.log(e);
 };
 resulter.getResult = function () {
