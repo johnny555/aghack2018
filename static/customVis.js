@@ -84,11 +84,27 @@ uploader.upload = function () {
 };
 
 
+
+global_result = {};
+
+function parseResult (e) {
+    var res = JSON.parse(e);
+    global_result = res;
+
+    const max = res.predictions.reduce(function(prev, current) {
+        return (prev.prob > current.prob) ? prev : current
+    });
+
+    return JSON.stringify(max, null, 4);
+};
+
+
+
+
 resulter = {};
 resulter.listener = (e) => {
-
-    output.innerText = e.predictions;
-    console.log(e);
+    output.innerText = parseResult(e);
+    
 };
 resulter.getResult = function () {
     var oReq = new XMLHttpRequest();
@@ -97,7 +113,7 @@ resulter.getResult = function () {
     var queryString = "https://b88bcz9xhe.execute-api.us-east-1.amazonaws.com/dev/v0.0.1/predict" +
         "?" + Object.keys(params).map((key) => {return key + "=" + encodeURIComponent(params[key])}).join("&");
     oReq.open("GET",
-              queryString);
+              queryString, true);
 
     oReq.onreadystatechange = function() {
         if (oReq.readyState == XMLHttpRequest.DONE) {
