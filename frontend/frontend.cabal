@@ -17,6 +17,7 @@ library
                , bytestring
                , servant
                , servant-reflex
+               , aeson
   exposed-modules:
     Frontend, Api
   ghc-options: -Wall
@@ -37,6 +38,7 @@ executable frontend
                , bytestring
                , servant
                , servant-reflex
+               , aeson
   --TODO: Make these ghc-options optional
   ghc-options: -threaded
   if os(darwin)

@@ -36,11 +36,10 @@ photo_settings.takepicture = function (width, height) {
     blobData = new Blob([ia], {type: "mimeString"});
     
     canvas.getContext('2d').drawImage(video, 0,0,width,height);
-    canvas.width = width;
-    canvas.height = hegiht;
+    //canvas.width = width;
+    //canvas.height = height;
     photo_settings.img = blobData;
-    uploader.init();
-    uploader.upload();
+
     return blobData;
 };
 

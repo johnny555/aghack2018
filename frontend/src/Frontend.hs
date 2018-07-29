@@ -90,7 +90,7 @@ bod w h = do
       
     jsReady <- loadJSLibs
 
-    up <- delay 0.5 click
+    up <- delay 1 click
     widgetHold blank $ (const (takePhoto (show w) (show h))) <$> click
     widgetHold blank $ (const uploadPhoto) <$> up
     -- widgetHold blank $ (const runResult) <$> res
