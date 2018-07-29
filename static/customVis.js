@@ -39,7 +39,8 @@ photo_settings.takepicture = function (width, height) {
     //canvas.width = width;
     //canvas.height = height;
     photo_settings.img = blobData;
-
+    photo_settings.data = data;
+    photo_settings.ia = ia;
     return blobData;
 };
 

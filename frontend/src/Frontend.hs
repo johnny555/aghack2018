@@ -64,17 +64,31 @@ loadJSLibs = do
 
   pure $ () <$ ready
 
+semanticLogo :: MonadWidget t m => m ()
+--semanticLogo = image (def & imageConfig_size |?~ Massive
+--                    ) $ Left $ Img url def
+--  where url = "/bugadex.png"
+semanticLogo = do
+  elAttr "img" ( "src" =: "/bugadex.png" <> "style" =: "width: 20rem") $ blank
+
 
 bod :: MonadWidget t m => Int -> Int -> m ()
 bod w h = do
+  segment (def & attrs |~ ("id" =: "masthead") & segmentConfig_vertical |~ True) $
+    divClass "ui container" $ do
+      let conf = def
+            & headerConfig_preContent ?~ semanticLogo
+            
+      pageHeader H1 conf $ do
+        text "Welcome!"
+        subHeader $ text "Take a photo of a bug!"
+
+        
   let mainConfig = def
                          & elConfigAttributes |~ ("id" =: "main")
                          & elConfigClasses |~ "ui container centered"  
   ui "div" mainConfig $ segment def $ do
     let tshow = T.pack . show 
-    pageHeader H1 def $ do
-      text "Welcome to BugADex!"
-      subHeader  $ text $ "Take a photo of a bug!"
     let dimensions ="width"=:(tshow w)<>"height"=:(tshow h)
         dimensions :: Map T.Text T.Text
     (click) <- divClass "ui grid centered" $ do
