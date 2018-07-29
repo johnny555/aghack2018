@@ -67,13 +67,17 @@ loadJSLibs = do
 
 bod :: MonadWidget t m => Int -> Int -> m ()
 bod w h = do
-  container def $ do
+  let mainConfig = def
+                         & elConfigAttributes |~ ("id" =: "main")
+                         & elConfigClasses |~ "ui container centered"  
+  ui "div" mainConfig $ do
     let tshow = T.pack . show 
-    pageHeader H1 def $ text "Welcome to BugADex!"
-    subHeader  $ text $ "Take a photo of a bug!"
+    pageHeader H1 def $ do
+      text "Welcome to BugADex!"
+      subHeader  $ text $ "Take a photo of a bug!"
     let dimensions ="width"=:(tshow w)<>"height"=:(tshow h)
         dimensions :: Map T.Text T.Text
-    (click, res) <- divClass "ui grid" $ do
+    (click, res) <- divClass "ui grid centered" $ do
       divClass "ui row" $ elAttr "video" ("id"=:"video"<>dimensions <> "autoplay"=:"") $ blank
       c <- divClass "ui row " $ do
         c <- S.button def $ text "Snap Photo"
