@@ -14,7 +14,7 @@ import Control.Lens
 
 import Common.Api
 import Static
-import Data.Map (fromList)
+import Data.Map (Map, fromList)
 import Data.Monoid ((<>))
 
 import           Language.Javascript.JSaddle.Types  (liftJSM, JSString, JSVal, JSM, MonadJSM)
@@ -40,7 +40,7 @@ frontend = (head', body)
                                             , ("href", linkvar)
                                             ]) $ return ()
 
-    body= bod
+    body= bod 200 200
 
 -- | This loads the JS libs, and then returns an event that fires when they have all loaded.
 loadJSLibs :: MonadWidget t m => m (Event t ())
@@ -65,12 +65,14 @@ loadJSLibs = do
   pure $ () <$ ready
 
 
-bod :: MonadWidget t m => m ()
-bod = do
+bod :: MonadWidget t m => Int -> Int -> m ()
+bod w h = do
   container def $ do
+    let tshow = T.pack . show 
     pageHeader H1 def $ text "Welcome to BugADex!"
     subHeader  $ text $ "Take a photo of a bug!"
-    let dimensions ="width"=:"640"<>"height"=:"480"
+    let dimensions ="width"=:(tshow w)<>"height"=:(tshow h)
+        dimensions :: Map T.Text T.Text
     (click, res) <- divClass "ui grid" $ do
       divClass "ui row" $ elAttr "video" ("id"=:"video"<>dimensions <> "autoplay"=:"") $ blank
       c <- divClass "ui row " $ do
@@ -84,19 +86,19 @@ bod = do
     jsReady <- loadJSLibs
 
     up <- delay 0.5 click
-    widgetHold blank $ (const takePhoto) <$> click
+    widgetHold blank $ (const (takePhoto (show w) (show h))) <$> click
     widgetHold blank $ (const uploadPhoto) <$> up
     widgetHold blank $ (const runResult) <$> res
     blank
 
 
 
-takePhoto :: (MonadWidget t m, MonadJSM m) =>  m ()
-takePhoto = do
+takePhoto :: (MonadWidget t m, MonadJSM m) =>  String -> String -> m ()
+takePhoto w h = do
   liftJSM $ do
     photoTaker <- jsg ("photo_settings" :: String)
 
-    photoTaker ^. js2 ("takepicture" :: String) ("640" :: String ) ("480" :: String)
+    photoTaker ^. js2 ("takepicture" :: String) w h
     uploader <- jsg ("uploader" :: String)
     uploader ^. js0 ("init" :: String)
   pure ()

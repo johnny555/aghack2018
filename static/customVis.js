@@ -7,8 +7,11 @@ var output = document.getElementById('output');
 function cameraStart() {
     console.log("starting camera...");
     navigator.mediaDevices.getUserMedia({
+        
     audio: false,
-    video: true
+        video: {
+            facingMode : {ideal: 'environment'}
+        }
 }).then(function ( stream) {
     video.srcObject = stream;
     video.play();
@@ -34,6 +37,7 @@ photo_settings.takepicture = function (width, height) {
 
     canvas.getContext('2d').drawImage(video, 0,0,width,height);
     photo_settings.img = blobData;
+    
     return blobData;
 };
 
@@ -102,4 +106,5 @@ resulter.getResult = function () {
 };
 
 //window.addEventListener("load", cameraStart, false);
+
 cameraStart();
