@@ -96,7 +96,11 @@ function parseResult (e) {
         return (prev.prob > current.prob) ? prev : current
     });
 
-    return JSON.stringify(max, null, 4);
+    var name = max.label;
+    var prob = max.prob;
+    
+    //return JSON.stringify(max, null, 4);
+    return [name, prob];
 };
 
 
@@ -104,7 +108,8 @@ function parseResult (e) {
 
 resulter = {};
 resulter.listener = (e) => {
-    output.innerText = parseResult(e);
+    var res = parseResult(e);
+    output.innerText = res[0] + " " + res[1];
     
 };
 resulter.getResult = function () {

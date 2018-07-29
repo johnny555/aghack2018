@@ -74,28 +74,28 @@ semanticLogo = do
 
 bod :: MonadWidget t m => Int -> Int -> m ()
 bod w h = do
-        
+
   let mainConfig = def
                          & elConfigAttributes |~ ("id" =: "main")
-                         & elConfigClasses |~ "ui container centered"  
+                         & elConfigClasses |~ "ui container centered"
   ui "div" mainConfig $ segment def $ do
-    
-    let tshow = T.pack . show 
+
+    let tshow = T.pack . show
     let dimensions ="width"=:(tshow w)<>"height"=:(tshow h)
         dimensions :: Map T.Text T.Text
     (click) <- divClass "ui grid centered" $ do
       semanticLogo
       divider def
-      divClass "ui row" $ elAttr "video" ("id"=:"video"<>dimensions <> "autoplay"=:"") $ blank
+      divClass "ui row" $ elAttr "video" ("id"=:"video"<>dimensions <> "autoplay"=:"" <> "playsinline"=:"" <> "controls"=:"true") $ blank
       c <- divClass "ui row " $ do
         c <- S.button def $ text "Snap Photo"
 
         pure (c)
       divClass "ui row" $ elAttr "canvas" (dimensions <> "id"=:"canvas") $ text "Please wait untill video is ready..."
       segment (def & segmentConfig_elConfig . elConfigAttributes |~ ("id" =: "output") ) $ text "no results yet"
-      
+
       pure (c)
-      
+
     jsReady <- loadJSLibs
 
     up <- delay 1 click
