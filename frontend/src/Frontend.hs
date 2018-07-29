@@ -77,22 +77,23 @@ bod w h = do
       subHeader  $ text $ "Take a photo of a bug!"
     let dimensions ="width"=:(tshow w)<>"height"=:(tshow h)
         dimensions :: Map T.Text T.Text
-    (click, res) <- divClass "ui grid centered" $ do
+    (click) <- divClass "ui grid centered" $ do
       divClass "ui row" $ elAttr "video" ("id"=:"video"<>dimensions <> "autoplay"=:"") $ blank
       c <- divClass "ui row " $ do
         c <- S.button def $ text "Snap Photo"
-        r <- S.button def $ text "Result "
-        pure (c, r)
+
+        pure (c)
       divClass "ui row" $ elAttr "canvas" (dimensions <> "id"=:"canvas") $ text "Please wait untill video is ready..."
       segment (def & segmentConfig_elConfig . elConfigAttributes |~ ("id" =: "output") ) $ text "no results yet"
-      pure c
-
+      
+      pure (c)
+      
     jsReady <- loadJSLibs
 
     up <- delay 0.5 click
     widgetHold blank $ (const (takePhoto (show w) (show h))) <$> click
     widgetHold blank $ (const uploadPhoto) <$> up
-    widgetHold blank $ (const runResult) <$> res
+    -- widgetHold blank $ (const runResult) <$> res
     blank
 
 

@@ -15,8 +15,10 @@ library
                , containers
                , jsaddle
                , bytestring
+               , servant
+               , servant-reflex
   exposed-modules:
-    Frontend
+    Frontend, Api
   ghc-options: -Wall
 
 executable frontend
@@ -33,6 +35,8 @@ executable frontend
                , containers
                , jsaddle
                , bytestring
+               , servant
+               , servant-reflex
   --TODO: Make these ghc-options optional
   ghc-options: -threaded
   if os(darwin)

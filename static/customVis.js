@@ -67,6 +67,7 @@ uploader.init = function () {
 
 uploader.upload = function () {
     var s3 = uploader.s3;
+    output.innerText = "Uploading ...";
     s3.upload({
         Key:  'testfile.png',
         Body: photo_settings.img,
@@ -75,7 +76,8 @@ uploader.upload = function () {
         if (err) {
             return alert("There was an error uploading");
         }
-        output.innerText = "Successfully uploaded";
+        output.innerText = "Successfully uploaded. Getting result.";
+        resulter.getResult();
     });
 };
 
@@ -105,6 +107,6 @@ resulter.getResult = function () {
 
 };
 
-//window.addEventListener("load", cameraStart, false);
+
 
 cameraStart();
