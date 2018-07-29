@@ -40,7 +40,7 @@ frontend = (head', body)
                                             , ("href", linkvar)
                                             ]) $ return ()
 
-    body= bod 200 200
+    body= bod 400 400
 
 -- | This loads the JS libs, and then returns an event that fires when they have all loaded.
 loadJSLibs :: MonadWidget t m => m (Event t ())
@@ -70,7 +70,7 @@ bod w h = do
   let mainConfig = def
                          & elConfigAttributes |~ ("id" =: "main")
                          & elConfigClasses |~ "ui container centered"  
-  ui "div" mainConfig $ do
+  ui "div" mainConfig $ segment def $ do
     let tshow = T.pack . show 
     pageHeader H1 def $ do
       text "Welcome to BugADex!"
