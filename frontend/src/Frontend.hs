@@ -22,6 +22,7 @@ import           Language.Javascript.JSaddle.Types  (liftJSM, JSString, JSVal, J
 import           Language.Javascript.JSaddle        (jss, js0, js1, js2,  jsg, create, setProp, textToJSString, toJSVal, js,
                                                      toJSString, getProp, obj, fun)
 
+import Control.Monad.IO.Class
 
 import Data.ByteString
 
@@ -128,8 +129,10 @@ makeVideoSettingsObject = liftJSM $ do
 
 
 -- | Implementation of the cameraStart function written in pure JS.
-cameraStart :: MonadJSM m =>  m ()
+cameraStart :: (MonadWidget t m, MonadJSM m) =>  m ()
 cameraStart = do
+  (ev, trf) <- newTriggerEvent
+
   conf <- makeVideoSettingsObject
   liftJSM $ do
     doc <- jsg ("document" :: String)
@@ -147,17 +150,18 @@ cameraStart = do
                                       video ^. jss ("srcObject" :: String) stream
                                       video ^. js0 ("play" :: String)
                                       video ^. js1 ("removeAttribute" :: String) ("controls" :: String)
+                                      liftIO $ trf $ T.pack "videoWorking"
                                       return ()
                                   )
 
     res1 ^. js1 ("catch" :: String) ( fun $ \ _ _ [err] -> do
                                        con ^. js1 ("log" :: String) err
-
+                                       liftIO $ trf $ T.pack "videofailed"
                                        return ()
                                   )
 
 
-    pure ()
+  blank
 
 
 takePhoto :: (MonadWidget t m, MonadJSM m) =>  String -> String -> m ()
