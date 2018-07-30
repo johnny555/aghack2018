@@ -7,7 +7,7 @@ var output = document.getElementById('output');
 function cameraStart() {
     console.log("starting camera...");
     navigator.mediaDevices.getUserMedia({
-        
+
     audio: false,
         video: {
             facingMode : {ideal: 'environment'}
@@ -34,7 +34,7 @@ photo_settings.takepicture = function (width, height) {
         ia[i] = data.charCodeAt(i);
     }
     blobData = new Blob([ia], {type: "mimeString"});
-    
+
     canvas.getContext('2d').drawImage(video, 0,0,width,height);
     //canvas.width = width;
     //canvas.height = height;
@@ -98,7 +98,7 @@ function parseResult (e) {
 
     var name = max.label;
     var prob = max.prob;
-    
+
     //return JSON.stringify(max, null, 4);
     return [name, prob];
 };
@@ -110,13 +110,13 @@ resulter = {};
 resulter.listener = (e) => {
     var res = parseResult(e);
     output.innerText = res[0] + " " + res[1];
-    
+
 };
 resulter.getResult = function () {
     var oReq = new XMLHttpRequest();
     var params = {image_url: "https://s3.amazonaws.com/dex-hackathon-bucket-2/testfile.png",
                   top_k: "3"};
-    var queryString = "https://b88bcz9xhe.execute-api.us-east-1.amazonaws.com/dev/v0.0.1/predict" +
+    var queryString ="https://nwo22ki9il.execute-api.us-east-1.amazonaws.com/dev/v0.0.1/predict" +
         "?" + Object.keys(params).map((key) => {return key + "=" + encodeURIComponent(params[key])}).join("&");
     oReq.open("GET",
               queryString, true);
@@ -126,11 +126,12 @@ resulter.getResult = function () {
             resulter.listener(oReq.responseText);
         }
     }
-    oReq.setRequestHeader("x-api-key", "Pc0H7UGiNL4DuShrbs1uO4DAsyQFhf5j8uLmXJI9");
+    oReq.setRequestHeader("x-api-key", "rRF4H5rD0t2XdbAANZGDY6WUj2VfN1uU2iIEC2ki");
+
     oReq.send();
 
 };
 
 
 
-cameraStart();
+// cameraStart();

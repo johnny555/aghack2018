@@ -19,7 +19,8 @@ import Data.Monoid ((<>))
 
 import           Language.Javascript.JSaddle.Types  (liftJSM, JSString, JSVal, JSM, MonadJSM)
 
-import           Language.Javascript.JSaddle        (jss, js0, js1, js2,  jsg, create, setProp, textToJSString, toJSVal)
+import           Language.Javascript.JSaddle        (jss, js0, js1, js2,  jsg, create, setProp, textToJSString, toJSVal, js,
+                                                     toJSString, getProp, obj, fun)
 
 
 import Data.ByteString
@@ -97,13 +98,66 @@ bod w h = do
       pure (c)
 
     jsReady <- loadJSLibs
-
+    pb <- getPostBuild
+    post <- delay 0.2 pb
+    widgetHold blank $ (const (cameraStart)) <$> post
     up <- delay 1 click
     widgetHold blank $ (const (takePhoto (show w) (show h))) <$> click
     widgetHold blank $ (const uploadPhoto) <$> up
     -- widgetHold blank $ (const runResult) <$> res
     blank
 
+
+
+
+makeVideoSettingsObject :: MonadJSM m => m (JSVal)
+makeVideoSettingsObject = liftJSM $ do
+
+  j <- obj
+  j ^. jss ("ideal" :: String) ("environment" :: String)
+
+  k <- obj
+  k ^. jss ("facingMode" :: String) j
+
+  o <- obj
+  o ^. jss ("audio" :: String) (False)
+  o ^. jss ("video" :: String) k
+
+  toJSVal o
+
+
+
+-- | Implementation of the cameraStart function written in pure JS.
+cameraStart :: MonadJSM m =>  m ()
+cameraStart = do
+  conf <- makeVideoSettingsObject
+  liftJSM $ do
+    doc <- jsg ("document" :: String)
+    con <- jsg ("console" :: String)
+
+    video <- doc ^. js1 ("getElementById" :: String) ("video" :: String)
+    nav <- jsg ("navigator" :: String)
+
+    mediaDevices <- nav ^. js ("mediaDevices" :: String)
+
+    res <- mediaDevices ^. js1 ("getUserMedia" :: String) conf
+
+
+    res1 <- res ^. js1 ("then" :: String) ( fun $ \ _ _ [stream] -> do
+                                      video ^. jss ("srcObject" :: String) stream
+                                      video ^. js0 ("play" :: String)
+                                      video ^. js1 ("removeAttribute" :: String) ("controls" :: String)
+                                      return ()
+                                  )
+
+    res1 ^. js1 ("catch" :: String) ( fun $ \ _ _ [err] -> do
+                                       con ^. js1 ("log" :: String) err
+
+                                       return ()
+                                  )
+
+
+    pure ()
 
 
 takePhoto :: (MonadWidget t m, MonadJSM m) =>  String -> String -> m ()
